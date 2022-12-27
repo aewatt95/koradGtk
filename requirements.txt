@@ -1,0 +1,4 @@
+koradctl==0.7
+matplotlib==3.5.1
+PyGObject==3.42.1
+pyserial==3.5
