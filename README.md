@@ -16,3 +16,12 @@ Run
 ```bash
 python3 main.py
 ```
+
+# Features
+
+- [x] Device selection
+- [x] Basic controls
+- [x] Graph
+- [x] CSV export
+- [ ] Battery charge profiles
+- [ ] Custom curves
