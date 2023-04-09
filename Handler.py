@@ -61,11 +61,18 @@ class Handler:
     def onCurrentChange(self, *current : (Gtk.Adjustment)) :
         self.powerSupply.set_current_setpoint(current[0].get_value())
 
+    def onXRangeChanged(self, *x_range : (Gtk.Adjustment)):
+        self.plotHandler.timeFilter = int(x_range[0].get_value())
+
     def onOcpClick(self, *switch : (Gtk.CheckButton)) :
         self.powerSupply.set_ocp_state(switch[0].get_active())
 
     def onOvpClick(self, *switch : (Gtk.CheckButton)) :
         self.powerSupply.set_ovp_state(switch[0].get_active())
+
+    def onShowSetpointChanged(self, *switch : (Gtk.Switch)):
+        self.plotHandler.showSetpoints = switch[0].get_active()
+        self.plotHandler.redrawTrigger = True
 
     def onDataRefresh(self, *parameter):
         self.plotHandler.updatePlot(self.dataHandler.data)
