@@ -590,19 +590,38 @@
             <property name="can-focus">False</property>
             <property name="hexpand">True</property>
             <child>
-              <object class="GtkComboBoxText" id="device_combo_box">
+              <object class="GtkToggleButton" id="connectButton">
+                <property name="label" translatable="yes">Connect</property>
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <signal name="changed" handler="onDeviceSelect" swapped="no"/>
-                <signal name="realize" handler="onDeviceDraw" swapped="no"/>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="relief">half</property>
+                <signal name="toggled" handler="onConnectClick" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="pack-type">end</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBoxText" id="device_combo_box">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <signal name="grab-notify" handler="onDeviceDraw" swapped="no"/>
+                <signal name="realize" handler="onDeviceDraw" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="pack-type">end</property>
                 <property name="position">1</property>
               </packing>
             </child>
+            <style>
+              <class name="linked"/>
+            </style>
           </object>
           <packing>
             <property name="pack-type">end</property>
