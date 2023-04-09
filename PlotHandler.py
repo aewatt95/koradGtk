@@ -5,6 +5,7 @@ from gi.repository import Gtk
 from DataHandler import DataHandler
 
 from matplotlib.figure import Figure
+import mplcyberpunk
 from matplotlib.backends.backend_gtk3agg import FigureCanvasGTK3Agg
 from threading import Thread
 import time
@@ -21,10 +22,8 @@ class PlotHandler(Thread):
         self.initPlot()
 
     def initPlot(self):
-        self.figure = Figure(figsize=(10,6), tight_layout=True, facecolor=("#CCCCCC"))
-        self.plot = self.figure.add_subplot()
-        for lineSettings in PlotHandler.STYLE:
-            newAx, = self.plot.plot([],[],lineSettings, linewidth=2)
+        plt.style.use("cyberpunk")
+        self.axis = []
             self.axis.append(newAx)
         self.plot.grid(True)
         self.plot.set_xlabel('Time[s]')
