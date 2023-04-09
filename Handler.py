@@ -26,6 +26,7 @@ class Handler:
         self.latestCurrent : Gtk.Label=self.builder.get_object("latest_current")
         self.latestPower : Gtk.Label=self.builder.get_object("latest_power")
         self.latestEnergy : Gtk.Label= self.builder.get_object("latest_energy")
+        self.window : Gtk.Window = self.builder.get_object("window")
         
     def onCreate(self, *args):
         pass
@@ -38,10 +39,21 @@ class Handler:
         comboBox[0].set_model(self.deviceList)
         comboBox[0].set_active(0)
 
-    def onDeviceSelect(self, *selection : (Gtk.ComboBox)):
-        self.powerSupply = koradctl.PowerSupply(koradctl.get_port(self.portNames[selection[0].get_active()]))
-        self.voltageSetpoint.set_value(self.powerSupply.get_voltage_setpoint().value)
-        self.currentSetpoint.set_value(self.powerSupply.get_current_setpoint().value)
+    def onConnectClick(self, *button : (Gtk.ToggleButton)):
+        if button[0].get_active():
+            try:
+                self.powerSupply = koradctl.PowerSupply(koradctl.get_port(self.portNames[self.deviceComboBox.get_active()]))
+                self.voltageSetpoint.set_value(self.powerSupply.get_voltage_setpoint().value)
+                self.currentSetpoint.set_value(self.powerSupply.get_current_setpoint().value)
+            except Exception as e:
+                button[0].set_active(False)
+                dialog = Gtk.MessageDialog(self.window, 
+                Gtk.DialogFlags.DESTROY_WITH_PARENT, Gtk.MessageType.ERROR, 
+                Gtk.ButtonsType.CLOSE, f"Error connecting to device:\n{str(e)}")
+                dialog.run()
+                dialog.destroy()
+
+
 
     def onEnableClick(self, *button : (Gtk.ToggleButton)) :
         state = button[0].get_active()
@@ -80,7 +92,6 @@ class Handler:
         self.latestCurrent.set_text(f"{self.dataHandler.data[DataHandler.DATA_ENTRIES[2]][-1]:.3}")
         self.latestPower.set_text(f"{self.dataHandler.data[DataHandler.DATA_ENTRIES[3]][-1]:.3}")
         self.latestEnergy.set_text(f"----")
-        
 
     def onExportClick(self, *button : (Gtk.Button)):
         saveDialog = Gtk.FileChooserDialog( 
@@ -114,3 +125,5 @@ class Handler:
             for port, _, _ in serial.tools.list_ports.comports():
                 self.portNames.append(port)
                 self.deviceList.append([port])
+            if len(self.deviceList) == 0:
+                self.deviceList.append(["-- No device --"])
